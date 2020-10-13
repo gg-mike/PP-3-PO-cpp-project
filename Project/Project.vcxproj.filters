@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="utility">
+      <UniqueIdentifier>{79DE5C48-E5BD-DBE3-EED5-66BA5A344245}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\pch.h" />
+    <ClInclude Include="source\utility\Graph.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="source\connections\Connection.h" />
+    <ClInclude Include="source\Reservation.h" />
+    <ClInclude Include="source\utility\UI.h" />
+    <ClInclude Include="source\utility\Log.h" />
+    <ClInclude Include="source\utility\Database.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="source\connections\FlightConnection.h" />
+    <ClInclude Include="source\connections\CruiseConnection.h" />
+    <ClInclude Include="source\connections\CombinedConnection.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\Application.cpp" />
+    <ClCompile Include="source\pch.cpp" />
+    <ClCompile Include="source\utility\Graph.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="source\connections\Connection.cpp" />
+    <ClCompile Include="source\utility\UI.cpp" />
+    <ClCompile Include="source\utility\Log.cpp" />
+    <ClCompile Include="source\utility\Database.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="source\connections\FilghtConnection.cpp" />
+    <ClCompile Include="source\connections\CruiseConnection.cpp" />
+    <ClCompile Include="source\connections\CombinedConnection.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\menus\main.menu" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\menus\account.menu" />
+    <None Include="assets\menus\add.menu" />
+  </ItemGroup>
+</Project>
