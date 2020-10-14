@@ -5,15 +5,19 @@
 struct Database {
 	Database(const std::string& filepath, char type='M') { FromFile(filepath, type); }
 	Database() = default;
-	int FindLog(const std::string& cityA, const std::string& cityB, char type);
-	int FindLog(int cityA_ID, int cityB_ID, char type);
+	Log GetLog(const std::string& cityA, const std::string& cityB, char type) const;
+	Log GetLog(int cityA_ID, int cityB_ID, char type) const;
+	Log GetLog(size_t ID) const;
+	std::vector<Log> GetBlock(size_t ID);
+	void MakeSummaryLog(size_t blockID = INT_MAX);
 	void FromFile(const std::string& filepath, char type='M');
 	void UpdataIDsInInfo(std::map<std::string, int>& citiesS2I);
 	friend std::ostream& operator<<(std::ostream& os, const Database& database);
 
-	std::vector<std::string> header;
-	std::vector<Log> info;
-	std::vector<int> splits;
+	std::vector<std::string> header = {};
+	std::vector<Log> summaries = {};
+	std::vector<std::vector<Log>> info = {};
+	size_t logNum = 0;
 };
 
 struct CitiesIDs {

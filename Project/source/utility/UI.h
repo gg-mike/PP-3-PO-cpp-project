@@ -4,10 +4,12 @@
 #include <string>
 #include <vector>
 
+#define OK(x) std::cout << "OK " << x << std::endl
 constexpr auto BClr = 7;
-extern std::array<int, 6> logWidths;
+extern std::array<size_t, 6> logWidths;
 
-/*Values:
+// Values:
+/*
  1 - dark blue
  2 - dark green
  3 - dark cyan
@@ -34,7 +36,8 @@ struct Clr {
 	char value;
 };
 
-/* Modes:
+// Modes:
+/*
 0 - top    border for table of logs
 1 - middle border for table of logs
 2 - bottom border for table of logs
@@ -43,29 +46,41 @@ struct Clr {
 5 - bottom border for table of menus
 */
 struct Border {
-	Border(char mode) : mode(mode) {
+	Border(char mode, int len = 0) : mode(mode), len(len) {
 		chars[0] = { -55, -53, -69 };
 		chars[1] = { -52, -50, -71 };
 		chars[2] = { -56, -54, -68 };
 	}
 	friend std::ostream& operator<<(std::ostream& os, Border border)
 	{
-		os << border.chars[border.mode % 3][0];
-		for (int i = 0; i < logWidths.size(); i++) {
-			for (int w = 0; w < logWidths[i] + 1; w++)
-				os << (char)-51;
-			if (border.mode < 3 && i != logWidths.size() - 1)
-				os << border.chars[border.mode % 3][1];
-			else if (border.mode >= 3 && i != logWidths.size() - 1)
-				os << (char)-51;
-			else
-				os << border.chars[border.mode % 3][2] << std::endl;
+		os << Clr(BClr);
+		if (border.len == 0) {
+			os << border.chars[border.mode % 3][0];
+			for (int i = 0; i < logWidths.size(); i++) {
+				for (int w = 0; w < logWidths[i] + 1; w++)
+					os << (char)-51;
+				if (border.mode < 3 && i != logWidths.size() - 1)
+					os << border.chars[border.mode % 3][1];
+				else if (border.mode >= 3 && i != logWidths.size() - 1)
+					os << (char)-51;
+				else
+					os << border.chars[border.mode % 3][2] << std::endl;
+			}
 		}
+		else {
+			os << border.chars[border.mode % 3][0];
+			for (int i = 0; i < border.len; i++)
+				os << (char)-51;
+			os << border.chars[border.mode % 3][2] << std::endl;
+		}
+		os << Clr();
 		return os;
 	}
 	char mode;
+	int len;
 	std::array<std::array<char, 3>, 3> chars;
 };
+
 
 struct Menus {
 	Menus(const std::vector<std::string>& filepaths) { FromFiles(filepaths); }
@@ -73,11 +88,19 @@ struct Menus {
 	void FromFile(const std::string& filepath, std::string& content);
 	std::string operator[](int i) { return contents[i]; }
 	void operator()(int i) const { std::cout << Border(3) << contents[i] << Border(5) << std::endl; }
+	void operator()(int i, const std::string& print) const { 
+		std::cout << Clr() << "  " << print << std::endl;
+		std::cout << Border(3) << contents[i] << Border(5) << std::endl; 
+	}
 
 	std::vector<std::string> contents;
 };
 
-template <typename T> T Input(const std::string& print="");
+template <typename T> 
+T Input(const std::string& print = "");
 
-// TODO: If user gives wrong number
-inline void WrongChoice() {}
+void WrongChoice(const std::string& print = "Invalid number! ");
+
+std::string Time(float t);
+
+std::string Money(float m);

@@ -1,29 +1,39 @@
 #pragma once
 #include "Database.h"
 
+struct RouteNode {
+	RouteNode(int routeID, int cityA_ID, int cityB_ID)
+		: routeID(routeID), cityA_ID(cityA_ID), cityB_ID(cityB_ID) {}
+
+	int routeID;
+	int cityA_ID;
+	int cityB_ID;
+};
+
 struct Node
 {
-	Node(int i, int size)
+	Node(size_t i, size_t size)
 		: index(i), visisted(false)
 	{
 		connectionsBit = std::vector<bool>(size);
-		connectionsList = std::vector<int>();
+		connectionsList = {};
 	}
 
-	int index;
+	size_t index;
 	bool visisted;
 	std::vector<bool> connectionsBit;
-	std::vector<int> connectionsList;
+	std::vector<size_t> connectionsList;
 };
 
 class Graph {
 public:
-	Graph(const Database& database, int citiesCount, char type);
+	Graph(const Database& database, size_t citiesCount, char type) { FromDatabase(database, citiesCount, type); }
 	Graph() = default;
-	// TODO : void FindConnection(const std::string& start, const std::string& end, bool direct, char preferedModeOfTransport);
+	void FromDatabase(const Database& database, size_t citiesCount, char type);
+	void FindConnections(const std::string& start, const std::string& end, std::vector<std::vector<RouteNode>>& results);
 	friend std::ostream& operator<<(std::ostream& os, const Graph& graph);
 
 private:
-	char type;
-	std::vector<Node> nodes;
+	char type = '\0';
+	std::vector<Node> nodes = {};
 };

@@ -5,8 +5,8 @@ class FlightConnection :
     public Connection
 {
 public:
-    FlightConnection(std::string start, std::string end);
     FlightConnection();
+    void UpdateInfo(std::string start, std::string end) override;
 private:
     void FindAllConnections() override;
     void FindStartEndConnections() override;

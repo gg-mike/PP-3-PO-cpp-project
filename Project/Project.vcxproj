@@ -122,6 +122,8 @@
     <Text Include="assets\menus\main.menu" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\databases\connections.csv" />
+    <None Include="assets\databases\reservations.csv" />
     <None Include="assets\menus\account.menu" />
     <None Include="assets\menus\add.menu" />
   </ItemGroup>

@@ -1,16 +1,23 @@
 #include "pch.h"
 #include "Graph.h"
 
-Graph::Graph(const Database& database, int citiesCount, char type) : type(type)
+void Graph::FromDatabase(const Database& database, size_t citiesCount, char type)
 {
-	for (int i = 0; i < citiesCount; i++)
+	this->type = type;
+	for (size_t i = 0; i < citiesCount; i++)
 		nodes.push_back(Node(i, citiesCount));
-	for (const auto& l : database.info) {
-		nodes[l.cityA_ID].connectionsBit[l.cityB_ID] = true;
-		nodes[l.cityB_ID].connectionsBit[l.cityA_ID] = true;
-		nodes[l.cityA_ID].connectionsList.push_back(l.cityB_ID);
-		nodes[l.cityB_ID].connectionsList.push_back(l.cityA_ID);
-	}
+	for	(const auto& block : database.info)
+		for (const auto& log : block) {
+			nodes[log.cityA_ID].connectionsBit[log.cityB_ID] = true;
+			nodes[log.cityB_ID].connectionsBit[log.cityA_ID] = true;
+			nodes[log.cityA_ID].connectionsList.push_back(log.cityB_ID);
+			nodes[log.cityB_ID].connectionsList.push_back(log.cityA_ID);
+		}
+}
+
+void Graph::FindConnections(const std::string& start, const std::string& end, std::vector<std::vector<RouteNode>>& results)
+{
+	results = {};
 }
 
 std::ostream& operator<<(std::ostream& os, const Graph& graph) {
