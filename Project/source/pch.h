@@ -1,10 +1,12 @@
 // ------------------------------
 // ----- C library --------------
 #include <cctype>
+#include <climits>
 #include <cmath>
 // ----- Containers -------------
 #include <array>
 #include <map>
+#include <queue>
 #include <vector>
 // ----- Input/Output -----------
 #include <iomanip>

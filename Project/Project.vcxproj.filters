@@ -7,35 +7,35 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\pch.h" />
-    <ClInclude Include="source\utility\Graph.h">
-      <Filter>utility</Filter>
-    </ClInclude>
-    <ClInclude Include="source\connections\Connection.h" />
     <ClInclude Include="source\Reservation.h" />
     <ClInclude Include="source\utility\UI.h" />
-    <ClInclude Include="source\utility\Log.h" />
-    <ClInclude Include="source\utility\Database.h">
+    <ClInclude Include="source\connection\CombinedConnection.h" />
+    <ClInclude Include="source\connection\Connection.h" />
+    <ClInclude Include="source\connection\CruiseConnection.h" />
+    <ClInclude Include="source\connection\FlightConnection.h" />
+    <ClInclude Include="source\database\Log.h" />
+    <ClInclude Include="source\database\Database.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="source\connections\FlightConnection.h" />
-    <ClInclude Include="source\connections\CruiseConnection.h" />
-    <ClInclude Include="source\connections\CombinedConnection.h" />
+    <ClInclude Include="source\database\Graph.h">
+      <Filter>utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Application.cpp" />
     <ClCompile Include="source\pch.cpp" />
-    <ClCompile Include="source\utility\Graph.cpp">
-      <Filter>utility</Filter>
-    </ClCompile>
-    <ClCompile Include="source\connections\Connection.cpp" />
     <ClCompile Include="source\utility\UI.cpp" />
-    <ClCompile Include="source\utility\Log.cpp" />
-    <ClCompile Include="source\utility\Database.cpp">
+    <ClCompile Include="source\connection\CombinedConnection.cpp" />
+    <ClCompile Include="source\connection\Connection.cpp" />
+    <ClCompile Include="source\connection\CruiseConnection.cpp" />
+    <ClCompile Include="source\connection\FilghtConnection.cpp" />
+    <ClCompile Include="source\database\Database.cpp">
       <Filter>utility</Filter>
     </ClCompile>
-    <ClCompile Include="source\connections\FilghtConnection.cpp" />
-    <ClCompile Include="source\connections\CruiseConnection.cpp" />
-    <ClCompile Include="source\connections\CombinedConnection.cpp" />
+    <ClCompile Include="source\database\Graph.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="source\database\Log.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="assets\menus\main.menu" />
@@ -45,5 +45,6 @@
     <None Include="assets\menus\add.menu" />
     <None Include="assets\databases\connections.csv" />
     <None Include="assets\databases\reservations.csv" />
+    <None Include="assets\menus\pathfinding.menu" />
   </ItemGroup>
 </Project>

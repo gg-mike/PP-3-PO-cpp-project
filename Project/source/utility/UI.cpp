@@ -1,6 +1,49 @@
 #include "pch.h"
 #include "UI.h"
 
+// ////////////////////
+// CLR
+// ////////////////////
+
+std::ostream& operator<<(std::ostream& os, Clr clr) {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<int>(clr.color));
+	return os;
+}
+
+// ////////////////////
+// BORDER
+// ////////////////////
+
+std::ostream& operator<<(std::ostream& os, Border border)
+{
+	os << Clr(BClr);
+	if (border.len == 0) {
+		os << border.chars[border.mode % 3][0];
+		for (int i = 0; i < columnWidths.size(); i++) {
+			for (int w = 0; w < columnWidths[i] + 1; w++)
+				os << (char)-51;
+			if (border.mode < 3 && i != columnWidths.size() - 1)
+				os << border.chars[border.mode % 3][1];
+			else if (border.mode >= 3 && i != columnWidths.size() - 1)
+				os << (char)-51;
+			else
+				os << border.chars[border.mode % 3][2] << std::endl;
+		}
+	}
+	else {
+		os << border.chars[border.mode % 3][0];
+		for (int i = 0; i < border.len; i++)
+			os << (char)-51;
+		os << border.chars[border.mode % 3][2] << std::endl;
+	}
+	os << Clr();
+	return os;
+}
+
+// ////////////////////
+// Menus
+// ////////////////////
+
 void Menus::FromFiles(const std::vector<std::string>& filepaths)
 {
 	for (int i = 0; i < filepaths.size(); i++) {
@@ -28,67 +71,47 @@ void Menus::FromFile(const std::string& filepath, std::string& content)
 	}
 }
 
-bool isInt(std::string line) {
+// ////////////////////
+// Utilities
+// ////////////////////
+
+bool IsUInt(std::string line) {
+	if (!line.size())
+		return false;
+	for (char c : line)
+		if (!isdigit(c))
+			return false;
+	return true;
+}
+
+bool IsInt(std::string line) {
+	if (!line.size())
+		return false;
 	for (char c : line)
 		if (!isdigit(c) && c != '-')
 			return false;
 	return true;
 }
 
-bool isFloat(std::string line) {
+
+bool IsDouble(std::string line) {
+	if (!line.size())
+		return false;
 	for (char c : line)
 		if (!isdigit(c) && c != '.' && c != '-')
 			return false;
 	return true;
 }
 
-std::string toLower(std::string line) {
+std::string ToLower(std::string line) {
 	for (auto& c : line)
 		c = tolower(c);
 	return line;
 }
 
-template<>
-std::string Input<std::string>(const std::string& print) {
-	std::cout << "  " << print;
-	std::string in;
-	std::getline(std::cin, in);
-	return toLower(in);
-}
-
-template<>
-char Input<char>(const std::string& print) {
-	std::cout << "  " << print;
-	std::string in;
-	std::getline(std::cin, in);
-	return tolower(in[0]);
-}
-
-template<>
-int Input<int>(const std::string& print) {
-	std::cout << "  " << print;
-	std::string in;
-	std::getline(std::cin, in);
-	if (isInt(in))
-		return atoi(in.c_str());
-	else
-		return -1;
-}
-
-template<>
-double Input<double>(const std::string& print) {
-	std::cout << "  " << print;
-	std::string in;
-	std::getline(std::cin, in);
-	if (isFloat(in))
-		return atof(in.c_str());
-	else
-		return -1;
-}
-
 void WrongChoice(const std::string& print)
 {
-	std::cout << Clr(12) << "  " << print;
+	std::cout << Clr(COLOR::RED) << print << " ";
 	system("pause");
 	std::cout << Clr();
 }
@@ -113,4 +136,49 @@ std::string Money(float m) {
 		line += "0";
 	line += std::to_string(n) + "$";
 	return line;
+}
+
+// ////////////////////
+// Input
+// ////////////////////
+
+template<>
+std::string Input<std::string>(const std::string& print) {
+	std::cout << print;
+	std::string in;
+	std::getline(std::cin, in);
+	return in;
+}
+
+template<>
+int Input<int>(const std::string& print) {
+	std::cout << print;
+	std::string in;
+	std::getline(std::cin, in);
+	if (IsInt(in))
+		return std::stoi(in);
+	else
+		return INT_MAX;
+}
+
+template<>
+size_t Input<size_t>(const std::string& print) {
+	std::cout << print;
+	std::string in;
+	std::getline(std::cin, in);
+	if (IsUInt(in))
+		return std::stoull(in);
+	else
+		return SIZE_MAX;
+}
+
+template<>
+double Input<double>(const std::string& print) {
+	std::cout << print;
+	std::string in;
+	std::getline(std::cin, in);
+	if (IsDouble(in))
+		return std::stod(in);
+	else
+		return DBL_MAX;
 }

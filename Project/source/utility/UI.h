@@ -4,38 +4,38 @@
 #include <string>
 #include <vector>
 
-#define OK(x) std::cout << "OK " << x << std::endl
-constexpr auto BClr = 7;
-extern std::array<size_t, 6> logWidths;
-
-// Values:
-/*
- 1 - dark blue
- 2 - dark green
- 3 - dark cyan
- 4 - dark red
- 5 - dark pink
- 6 - gold
- 7 - light grey
- 8 - dark grey
- 9 - blue
-10 - green
-11 - cyan
-12 - red
-13 - pink
-14 - yellow
-15 - white
-*/
-struct Clr {
-	Clr(char value=15) : value(value) {}
-	friend std::ostream& operator<<(std::ostream& os, Clr clr)
-	{
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), clr.value); 
-		return os;
-	}
-	char value;
+enum class COLOR {
+	DARK_BLUE = 1,
+	DARK_GREEN,
+	DARK_CYAN,
+	DARK_RED,
+	DARK_PINK,
+	DARK_YELLOW,
+	LIGHT_GREY,
+	DARK_GREY,
+	BLUE,
+	GREEN,
+	CYAN,
+	RED,
+	PINK,
+	YELLOW,
+	WHITE
 };
 
+// Border's color
+constexpr auto BClr = COLOR::LIGHT_GREY;
+// Widths of column in logs printing
+extern std::array<size_t, 6> columnWidths;
+
+// Colores for prints
+// Use enum COLOR
+struct Clr {
+	Clr(COLOR color = COLOR::WHITE) : color(color) {}
+	friend std::ostream& operator<<(std::ostream& os, Clr clr);
+	COLOR color;
+};
+
+// Borderes for prints
 // Modes:
 /*
 0 - top    border for table of logs
@@ -46,36 +46,13 @@ struct Clr {
 5 - bottom border for table of menus
 */
 struct Border {
+	// Len if you want continous border with only one column
 	Border(char mode, int len = 0) : mode(mode), len(len) {
 		chars[0] = { -55, -53, -69 };
 		chars[1] = { -52, -50, -71 };
 		chars[2] = { -56, -54, -68 };
 	}
-	friend std::ostream& operator<<(std::ostream& os, Border border)
-	{
-		os << Clr(BClr);
-		if (border.len == 0) {
-			os << border.chars[border.mode % 3][0];
-			for (int i = 0; i < logWidths.size(); i++) {
-				for (int w = 0; w < logWidths[i] + 1; w++)
-					os << (char)-51;
-				if (border.mode < 3 && i != logWidths.size() - 1)
-					os << border.chars[border.mode % 3][1];
-				else if (border.mode >= 3 && i != logWidths.size() - 1)
-					os << (char)-51;
-				else
-					os << border.chars[border.mode % 3][2] << std::endl;
-			}
-		}
-		else {
-			os << border.chars[border.mode % 3][0];
-			for (int i = 0; i < border.len; i++)
-				os << (char)-51;
-			os << border.chars[border.mode % 3][2] << std::endl;
-		}
-		os << Clr();
-		return os;
-	}
+	friend std::ostream& operator<<(std::ostream& os, Border border);
 	char mode;
 	int len;
 	std::array<std::array<char, 3>, 3> chars;
@@ -89,18 +66,22 @@ struct Menus {
 	std::string operator[](int i) { return contents[i]; }
 	void operator()(int i) const { std::cout << Border(3) << contents[i] << Border(5) << std::endl; }
 	void operator()(int i, const std::string& print) const { 
-		std::cout << Clr() << "  " << print << std::endl;
+		std::cout << Clr() << print << std::endl;
 		std::cout << Border(3) << contents[i] << Border(5) << std::endl; 
 	}
 
 	std::vector<std::string> contents;
 };
 
+// String to lowercase
+std::string ToLower(std::string line);
+// Error message in red with pause
+void WrongChoice(const std::string& print = "  Invalid number! ");
+// Time formatting 
+std::string Time(float t);
+// Money formatting
+std::string Money(float m);
+// Safe input
 template <typename T> 
 T Input(const std::string& print = "");
 
-void WrongChoice(const std::string& print = "Invalid number! ");
-
-std::string Time(float t);
-
-std::string Money(float m);
