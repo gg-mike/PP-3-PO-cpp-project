@@ -1,21 +1,5 @@
-ID;From;To;Duration;Cost;Type;
-1001;A;B;1;100;F;
-1002;A;C;2;170;F;
-B
-1003;A;F;4;300;F;
-1004;A;H;2;200;F;
-1005;A;I;2;150;F;
-B
-1006;B;C;1;80;F;
-2007;B;D;10;50;C;
-1008;B;I;2;220;F;
-2009;D;F;10;40;C;
-2010;D;H;20;100;C;
-1011;E;G;2;160;F;
-B
-2013;G;H;5;20;C;
-1014;G;J;3;230;F;
-2015;H;J;10;60;C;
-B
-1008;I;B;2;220;F;
-X
+240211;easyJet;Newcastle;Belfast;1;35.5;P;
+240209;easyJet;Belfast;Liverpool;1;38;P;
+240109;easyJet;Liverpool;Amsterdam;1.5;38.5;P;
+210103;Air France;Amsterdam;Calais;1.25;213;P;
+160304;P&O Ferries;Calais;Dover;1.5;103;F;

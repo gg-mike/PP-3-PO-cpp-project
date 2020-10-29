@@ -93,10 +93,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="source\connection\CruiseConnection.h" />
+    <ClInclude Include="source\connection\FerryConnection.h" />
     <ClInclude Include="source\connection\CombinedConnection.h" />
     <ClInclude Include="source\connection\Connection.h" />
-    <ClInclude Include="source\connection\FlightConnection.h" />
+    <ClInclude Include="source\connection\PlaneConnection.h" />
     <ClInclude Include="source\pch.h" />
     <ClInclude Include="source\Reservation.h" />
     <ClInclude Include="source\database\Database.h" />
@@ -105,11 +105,11 @@
     <ClInclude Include="source\utility\UI.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\connection\CruiseConnection.cpp" />
+    <ClCompile Include="source\connection\FerryConnection.cpp" />
     <ClCompile Include="source\Application.cpp" />
     <ClCompile Include="source\connection\CombinedConnection.cpp" />
     <ClCompile Include="source\connection\Connection.cpp" />
-    <ClCompile Include="source\connection\FilghtConnection.cpp" />
+    <ClCompile Include="source\connection\PlaneConnection.cpp" />
     <ClCompile Include="source\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -123,7 +123,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\databases\connections.csv" />
-    <None Include="assets\databases\reservations.csv" />
+    <None Include="assets\helps\account.help" />
+    <None Include="assets\helps\add.help" />
+    <None Include="assets\helps\main.help" />
     <None Include="assets\menus\account.menu" />
     <None Include="assets\menus\add.menu" />
     <None Include="assets\menus\pathfinding.menu" />

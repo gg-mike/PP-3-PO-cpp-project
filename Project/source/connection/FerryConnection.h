@@ -2,14 +2,14 @@
 #include "Connection.h"
 
 // Interface between database and reservations for cruises only
-class CruiseConnection :
+class FerryConnection :
 	public Connection
 {
 public:
     // Initializers
 
     // Inits database
-    CruiseConnection();
+    FerryConnection();
     
 private:
     void InitDatabase() override;

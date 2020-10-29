@@ -1,6 +1,6 @@
 #pragma once
 #include "Log.h"
-#include <array>
+#include <vector>
 #include <set>
 
 // Stores all connections from given node and state of node
@@ -10,7 +10,7 @@ struct Node
 	Node(std::set<size_t> connectionsSet)
 		: connectionsSet(connectionsSet) {}
 
-	bool visisted = false;
+	double currWeight = DBL_MAX;
 	std::set<size_t> connectionsSet = {};
 };
 
@@ -25,15 +25,20 @@ public:
 	Graph(const std::vector<std::vector<Log>>& info, size_t citiesCount) { Init(info, citiesCount); }
 	// info from database, citiesCount from citiesIDs
 	void Init(const std::vector<std::vector<Log>>& info, size_t citiesCount);
-	// info from database, type (D - duration, C - cost)
-	void InitMST(const std::vector<std::vector<Log>>& info, char type);
+
+	// Getters
+
+	// Gets graph nodes
+	const std::vector<Node>& GetNodes() const { return std::ref(nodes); }
+	// Gets duration weights of connections
+	const std::map<std::set<size_t>, double>& GetDWeights() const { return std::ref(dWeights); }
+	// Gets cost weights of connections
+	const std::map<std::set<size_t>, double>& GetCWeights() const { return std::ref(cWeights); }
 
 	// Pathfinding
 
-	// Pathfinding in graphNodes
-	void FindConnections(size_t startID, size_t endID, std::vector<size_t>& results);
-	// Pathfinding in mstNodes
-	void FindConnectionsWeighted(size_t startID, size_t endID, std::vector<size_t>& results);
+	// Dijkstra's algorithm, type(D - duration, C - cost)
+	void FindConnections(size_t startID, size_t endID, char type, std::vector<size_t>& path);
 
 	// Others
 
@@ -42,15 +47,11 @@ public:
 private:
 	// Sets state of all nodes to false
 	void Reset(std::vector<Node>& nodes);
-	// Pathfinding for given nodes
-	void FindConnectionUtility(std::vector<Node>& nodes, size_t startID, size_t endID, std::vector<size_t>& results);
 
 private:
-	// Type of weigth
-	char type = '\0';
-	std::map<std::set<size_t>, double> edgeWeights;
-	// Used for pathfinding (smallest number of transers)
-	std::vector<Node> graphNodes = {};
-	// Used for pathfinding (smallest cost/duration)
-	std::vector<Node> mstNodes = {};
+	// Stores smallest weight value for given connection
+	std::map<std::set<size_t>, double> dWeights;
+	std::map<std::set<size_t>, double> cWeights;
+	// Connection nodes
+	std::vector<Node> nodes = {};
 };

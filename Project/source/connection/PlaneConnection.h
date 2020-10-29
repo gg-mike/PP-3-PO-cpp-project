@@ -2,14 +2,14 @@
 #include "Connection.h"
 
 // Interface between database and reservations for flights only
-class FlightConnection :
+class PlaneConnection :
     public Connection
 {
 public:
     // Initializers
 
     // Inits database
-    FlightConnection();
+    PlaneConnection();
 
 private:
     void InitDatabase() override;

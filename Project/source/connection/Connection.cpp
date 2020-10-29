@@ -2,71 +2,94 @@
 #include "Connection.h"
 #include "utility/UI.h"
 
-void Connection::Init(std::string start, std::string end, bool isWeighted, char type)
-{
-	this->start = start;
-	this->end = end;
-	FindConnections(isWeighted, type);
+// ////////////////////
+// Utility
+// ////////////////////
+
+void PathOptions(size_t i, const std::vector<std::vector<Log>>& available, std::vector<Log> curr, std::vector<std::vector<Log>>& info) {
+	if (i >= available.size())
+		info.push_back(curr);
+	else {
+		for (auto& log : available[i]) {
+			curr.push_back(log);
+			PathOptions(i + 1ull, available, curr, info);
+			curr.pop_back();
+		}
+	}
 }
 
-Log Connection::GetLog(size_t ID)
-{
+// ////////////////////
+// Connection
+// ////////////////////
+
+void Connection::Init(std::string start, std::string end, char type) {
+	this->start = start;
+	this->end = end;
+	FindConnections(type);
+}
+
+std::string Connection::GetCityName(size_t ID) {
+	return database.GetCitiesIDs().cities.at(ID);
+}
+
+Log Connection::GetLog(size_t ID) {
 	Log log = database.GetLog(ID);
 	return log;
 }
 
-std::vector<Log> Connection::GetBlock(size_t ID)
-{
+std::vector<Log> Connection::GetBlock(size_t ID) {
 	std::vector<Log> block = startEndConnections.GetBlock(ID);
 	return block;
 }
 
-void Connection::ShowAllCities()
-{
-	std::cout << database.GetCitiesIDs() << std::endl;
-	std::cout << Clr(COLOR::DARK_GREY) << "  " << database.GetCitiesIDs().cities.size() << " cities found.\n" << Clr();
+void Connection::ShowAllCities() {
+	std::cout << database.GetCitiesIDs();
+	std::cout << Clr(COLOR::DARK_GREY) << "  Number of cities found: " << database.GetCitiesIDs().cities.size() << Clr() << std::endl << std::endl;
 }
 
-void Connection::ShowDatabase()
-{
+void Connection::ShowDatabase() {
 	std::cout << database << std::endl;
-	std::cout << Clr(COLOR::DARK_GREY) << "  " << database.GetLogCount() << " connections found.\n" << Clr();
 }
 
-void Connection::ShowStartEndConnections()
-{
+void Connection::ShowStartEndConnections() {
 	if (start == "" || end == "")
 		WrongChoice("One of the start and end points is empty! ");
-	else {
+	else
 		std::cout << startEndConnections << std::endl;
-		std::cout << Clr(COLOR::DARK_GREY) << "  " << startEndConnections.GetLogCount() << " routes found.\n" << Clr();
-	}
 }
 
-bool Connection::IsValidCity(std::string city)
-{
-	if (std::find(database.GetCitiesIDs().cities.begin(), database.GetCitiesIDs().cities.end(), city) != database.GetCitiesIDs().cities.end())
+bool Connection::IsValidCity(size_t cityID) {
+	if (cityID <= database.GetCitiesIDs().cities.size())
 		return true;
 	return false;
 }
 
-void Connection::PathToDatabase(const std::vector<size_t>& path, bool isWeighted, char type)
-{
-	// TODO: Generate connections
+bool Connection::IsValidRouteID(size_t ID) {
+	if (ID >= startEndConnections.GetInfo().size())
+		return false;
+	return true;
 }
 
-void Connection::FindConnections(bool isWeighted, char type)
-{
+void Connection::PathToDatabase(const std::vector<size_t>& path, char type) {
+	std::vector<std::vector<Log>> available;
+	std::vector<std::vector<Log>> info = {};
+
+	if (path.size()) {
+		for (size_t i = 0; i < path.size() - 1; i++)
+			available.push_back(database.GetLogs(path[i], path[i + 1ull]));
+		PathOptions(0, available, {}, info);
+	}
+
+	startEndConnections.Init(database.GetHeader(), info, 'M', true);
+	startEndConnections.SortBlock(type);
+}
+
+void Connection::FindConnections(char type) {
 	std::vector<size_t> path;
 	size_t startID = database.GetCitiesIDs().S2I.at(start);
 	size_t endID = database.GetCitiesIDs().S2I.at(end);
 
-	if (isWeighted) {
-		database.GetGraph().InitMST(database.GetInfo(), type);
-		database.GetGraph().FindConnectionsWeighted(startID, endID, path);
-	}
-	else
-		database.GetGraph().FindConnections(startID, endID, path);
+	database.GetGraph().FindConnections(startID, endID, type, path);
 
-	PathToDatabase(path, isWeighted, type);
+	PathToDatabase(path, type);
 }

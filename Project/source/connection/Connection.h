@@ -11,10 +11,13 @@ public:
 	// Empty object
 	Connection() = default;
 	// Inits start and end locations and runs pathfinding
-	void Init(std::string start, std::string end, bool isWeighted, char type = 'D');
+	// type(D - shortest duration, C - smallest cost)
+	void Init(std::string start, std::string end, char type);
 
 	// Getters
 
+	// Gets city name with specify index
+	std::string GetCityName(size_t ID);
 	// Gets log with given id
 	// Redirected to: Log Database::GetLog(size_t)
 	Log GetLog(size_t ID);
@@ -24,6 +27,9 @@ public:
 	// Gets count of all logs in database
 	// Redirected to: size_t Database::GetLogCount()
 	size_t GetLogCount() const { return database.GetLogCount(); }
+	// Gets count of all blocks in database
+	// Redirected to: size_t Database::GetBlockCount()
+	size_t GetBlockCount() const { return database.GetBlockCount(); }
 	
 	// Printers
 	
@@ -36,17 +42,18 @@ public:
 
 	// Others
 
-	// Valiadtion of city choice
-	bool IsValidCity(std::string city);
+	// Validates of city choice
+	bool IsValidCity(size_t cityID);
+	// Validates route ID
+	bool IsValidRouteID(size_t ID);
 
 protected:
 	virtual void InitDatabase() = 0;
 	// Converts results of pathfinding into the database
-	void PathToDatabase(const std::vector<size_t>& path, bool isWeighted, char type);
+	void PathToDatabase(const std::vector<size_t>& path, char type);
 	// Pathfinding
-	// isWeighted(false) - smallest number of transers
-	// isWeighted(true), type(D - smallest duration, C - smallest cost)
-	void FindConnections(bool isWeighted, char type);
+	// type(D - shortest duration, C - smallest cost)
+	void FindConnections(char type);
 
 protected:
 	std::string start = "";

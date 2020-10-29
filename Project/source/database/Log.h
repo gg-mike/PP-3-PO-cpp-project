@@ -13,18 +13,23 @@ struct Log {
 
 	// Empty object
 	Log() = default;
-	// Object with given params, type (F - flights, C - cruises, M - mixed); mixed only for summary logs
+	// Converts raw string from file to log
+	Log(const std::string& line);
+	// type (F - flights, C - cruises, M - mixed); mixed only for summary logs
 	// !! IDs of cities must be updated individually !!
-	Log(size_t ID, std::string cityA, std::string cityB, float duration, float cost, char type, COLOR color = COLOR::WHITE)
-		: ID(ID), cityA(cityA), cityB(cityB), duration(duration), cost(cost), type(type), color(color) {}
+	Log(size_t ID, std::string carrier, std::string cityA, std::string cityB, float duration, float cost, char type, COLOR color = COLOR::WHITE)
+		: ID(ID), carrier(carrier), cityA(cityA), cityB(cityB), duration(duration), cost(cost), type(type), color(color) {}
 	
 	// Others
 	
 	// Updates ID of cities using aliases from citiesIDs
 	void UpdataIDsOfCities(const std::map<std::string, size_t>& S2I);
+	// Checks if log matches filter
+	bool FilterPass() const;
 	friend std::ostream& operator<<(std::ostream& os, const Log& log);
 
 	size_t ID = SIZE_MAX;
+	std::string carrier = "";
 	std::string cityA = "";
 	std::string cityB = "";
 	size_t cityA_ID = SIZE_MAX;
