@@ -103,6 +103,7 @@
     <ClInclude Include="source\database\Graph.h" />
     <ClInclude Include="source\database\Log.h" />
     <ClInclude Include="source\utility\UI.h" />
+    <ClInclude Include="source\connection\TrainConnection.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\connection\FerryConnection.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="source\database\Graph.cpp" />
     <ClCompile Include="source\database\Log.cpp" />
     <ClCompile Include="source\utility\UI.cpp" />
+    <ClCompile Include="source\connection\TrainConnection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="assets\menus\main.menu" />

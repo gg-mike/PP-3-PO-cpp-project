@@ -9,10 +9,30 @@ namespace UI {
 	static Menus menus;
 }
 
+bool FilterInput(bool first, bool reenter, bool smartFilter, const std::string& citiesFilter="") {
+	if ((reenter && UI::filter.active && Confirm("y to reenter database filter: ")) || (!reenter && Confirm("y to enter database filter: "))) {
+		std::string filterContent = Input<std::string>(((first) ? "Filter (CCDCT): " : "Fliter (CDCT): "));
+		UI::filter.Init(filterContent, ((first) ? "CCDCT" : "CDCT"));
+
+		if (!first && smartFilter) {
+			UI::filter.citiesActive = true;
+			UI::filter.cities = citiesFilter;
+		}
+		return true;
+	}
+	else if (!first && smartFilter) {
+		UI::filter.Reset();
+		UI::filter.active = true;
+		UI::filter.citiesActive = true;
+		UI::filter.cities = citiesFilter;
+	}
+	return false;
+}
+
 template<typename T>
 void SpecificAdd(Reservation<T>& reservation) {
 	std::string filterContent, citiesFilter = "";
-	size_t choice;
+	size_t choice = SIZE_MAX, resID = reservation.GetInfoRes().size();
 	bool add = false;
 	bool done = false;
 	bool first = true;
@@ -27,40 +47,37 @@ void SpecificAdd(Reservation<T>& reservation) {
 
 	while (!done) {
 		if (!first && smartFilter)
-			citiesFilter = reservation.GetBlockRes(reservation.GetBlockCountRes() - 1ull)[reservation.GetBlockRes(reservation.GetBlockCountRes() - 1ull).size() - 1].cityB;
+			citiesFilter = reservation.GetInfoRes().back().back().cityB;
 
 		// Filter
-		if (Confirm("y to enter database filter: ")) {
-			filterContent = Input<std::string>(((first) ? "Filter (CCDCT): " : "Fliter (CDCT): "));
-			UI::filter.Init(filterContent, ((first) ? "CCDCT" : "CDCT"));
-			if (!first && smartFilter) {
-				UI::filter.citiesActive = true;
-				UI::filter.cities = citiesFilter;
-			}
-		}
-		else if (!first && smartFilter) {
-			UI::filter.Reset();
-			UI::filter.active = true;
-			UI::filter.citiesActive = true;
-			UI::filter.cities = citiesFilter;
-		}
+		bool filterActive = FilterInput(first, false, smartFilter, citiesFilter);
 
 		// Choosing connection
 		do {
 			if (invalid)
 				WrongChoice("  Invalid connection ID!");
 			system("cls");
+			invalid = false;
 
 			std::cout << "  Smart Filter: " << Clr(COLOR::DARK_YELLOW) << ((smartFilter) ? "enabled" : "disabled") << Clr() << std::endl;
 			reservation.ShowConnections();
 
-			std::cout << "  Which connections do you want to add?\n  You can switch direction of connection later.\n";
-			choice = Input<size_t>("ID (0 to abort): ");
-			if (choice && choice != SIZE_MAX)
-				add = reservation.IsValidConnectionID(choice);
+			std::cout << "\n  Your current route:\n";
+			reservation.ShowReservation(resID);
+			std::cout << std::endl;
 
-			invalid = true;
+			if (!filterActive || (filterActive && !FilterInput(first, true, smartFilter, citiesFilter))) {
+				std::cout << "\n  Which connections do you want to add?\n  You can switch direction of connection later.\n";
+				choice = Input<size_t>("ID (0 to abort): ");
+				if (choice && choice != SIZE_MAX)
+					add = reservation.IsValidLogIDConD(choice);
+
+				invalid = true;
+			}
 		} while (choice && !add);
+
+		if (!choice)
+			done = true;
 
 		// Adding connection
 		if (add) {
@@ -71,33 +88,35 @@ void SpecificAdd(Reservation<T>& reservation) {
 				reservation += std::pair<size_t, size_t>{ choice, ((first) ? 0 : 2) };
 
 
-			if (!Confirm("y to add another connection: ")) {
-				// Saving all changes
-				if (Confirm("y to save all changes: "))
-					std::cout << "  Route added.\n  ";
-				// Discarding all changes
-				else {
-					std::cout << "  Are you sure you want to discard all changes?\n";
-					std::cout << Clr(COLOR::RED) << "  This process is irreversible!" << Clr() << std::endl;
+			done = !Confirm("y to add another connection: ");
+		}
 
-					if (Confirm("y to confirm: ")) {
-						reservation -= (SIZE_MAX);
-						std::cout << "  Changes discarded.\n  ";
-					}
-					else
-						std::cout << "  Process aborted. Route added.\n  ";
+		if (done && reservation.IsValidBlockIDRes(resID)) {
+			if (Confirm("y to save all changes: "))
+				std::cout << "  Route added.\n  ";
+			// Discarding all changes
+			else {
+				std::cout << "  Are you sure you want to discard all changes?\n";
+				std::cout << Clr(COLOR::RED) << "  This process is irreversible!" << Clr() << std::endl;
+
+				if (Confirm("y to confirm: ")) {
+					reservation -= (SIZE_MAX);
+					std::cout << "  Changes discarded.\n  ";
 				}
-				done = true;
+				else
+					std::cout << "  Process aborted. Route added.\n  ";
 			}
-		}
-		else {
 			done = true;
-			std::cout << "  Process aborted.\n  ";
 		}
-		add = false;
-		first = false;
-		invalid = false;
+		else if (done)
+			std::cout << "  Process aborted.\n  ";
+		else {
+			add = false;
+			first = false;
+			invalid = false;
+		}
 	}
+	UI::filter.Reset();
 	system("pause");
 }
 
@@ -109,16 +128,20 @@ void FindBetweenAdd(Reservation<T>& reservation) {
 	bool first = true;
 
 	do {
-		if (!first)
-			WrongChoice();
+		if (!first) {
+			if (startID == endID)
+				WrongChoice("  Please specify 2 diffrent cities! ");
+			else
+				WrongChoice();
+		}
 		system("cls");
 
 		std::cout << "  Cities\n";
 		reservation.ShowCities();
 		startID = Input<size_t>("From (0 to abort): ");
-		if (startID && reservation.IsValidCity(startID)) {
+		if (startID && reservation.IsValidCity(startID - 1ull)) {
 			endID = Input<size_t>("To   (0 to abort): ");
-			if (endID && reservation.IsValidCity(endID))
+			if (endID && reservation.IsValidCity(endID - 1ull) && startID != endID)
 				isChoosen = true;
 		}
 
@@ -175,7 +198,7 @@ void FindBetweenAdd(Reservation<T>& reservation) {
 			std::cout << "  Which route do you want to add?\n";
 			choice2 = Input<size_t>("ID (0 to abort): ");
 			if (choice2 && choice2 != SIZE_MAX)
-				add = reservation.IsValidRouteID(choice2 - 1ull);
+				add = reservation.IsValidBlockIDConSE(choice2 - 1ull);
 
 			first = false;
 		} while (choice2 && !add);
@@ -244,7 +267,7 @@ void DeleteLoop(Reservation<T>& reservation) {
 		choice = Input<size_t>("ID (0 to abort): ");
 
 		first = false;
-	} while (!reservation.IsValidReservationID(choice - 1ull) && choice);
+	} while (!reservation.IsValidBlockIDRes(choice - 1ull) && choice);
 	
 	if (choice) {
 		std::cout << "  Are you sure you want to delete reservation nr " << Clr(COLOR::DARK_YELLOW) << choice << Clr() << "?\n";
@@ -323,6 +346,7 @@ void MainLoop() {
 			break;
 		case 3:
 			// Trains
+			AccountLoop<TrainConnection>();
 			break;
 		case 4:
 			// All

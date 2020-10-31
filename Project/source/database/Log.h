@@ -15,7 +15,7 @@ struct Log {
 	Log() = default;
 	// Converts raw string from file to log
 	Log(const std::string& line);
-	// type (F - flights, C - cruises, M - mixed); mixed only for summary logs
+	// type (F - ferry, P - plane, T - train, M - mixed); mixed only for summary logs
 	// !! IDs of cities must be updated individually !!
 	Log(size_t ID, std::string carrier, std::string cityA, std::string cityB, float duration, float cost, char type, COLOR color = COLOR::WHITE)
 		: ID(ID), carrier(carrier), cityA(cityA), cityB(cityB), duration(duration), cost(cost), type(type), color(color) {}

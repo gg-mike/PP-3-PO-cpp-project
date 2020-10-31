@@ -74,6 +74,10 @@ void PairFilters(std::string& input, std::pair<double, double>& filters, bool& a
 			i++;
 		}
 	}
+	else if (input.size()) {
+		wrgFilters += input + ' ';
+		wrgFiltersActivation = true;
+	}
 }
 
 void Filter::Init(const std::string& line, const std::string& filterType) {
@@ -86,7 +90,7 @@ void Filter::Init(const std::string& line, const std::string& filterType) {
 	while (std::getline(ss, s, ';')) {
 		// Skipping cities
 		if (filterType == "CDCT" && i == 1)
-			i++;
+			i = 2;
 
 		switch (i)
 		{
@@ -282,8 +286,7 @@ std::string ToLower(std::string line) {
 	return line;
 }
 
-void WrongChoice(const std::string& print)
-{
+void WrongChoice(const std::string& print) {
 	std::cout << Clr(COLOR::RED) << print << " ";
 	system("pause");
 	std::cout << Clr();
@@ -329,14 +332,13 @@ size_t Input<size_t>(const std::string& print) {
 	std::string in;
 	std::getline(std::cin, in);
 	in.erase(std::remove(in.begin(), in.end(), ' '), in.end());
-	if (IsUInt(in))
+	if (in.size() <= 18 && IsUInt(in))
 		return std::stoull(in);
 	else
 		return SIZE_MAX;
 }
 
-bool Confirm(const std::string& print, char confirmCh)
-{
+bool Confirm(const std::string& print, char confirmCh) {
 	std::string input = Input<std::string>(print);
 	input.erase(std::remove(input.begin(), input.end(), ' '), input.end());
 	return std::tolower(input[0]) == confirmCh && input.size() == 1;

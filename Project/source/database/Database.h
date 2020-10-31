@@ -46,18 +46,18 @@ public:
 	Log GetLog(size_t ID) const;
 	// Gets block with given id
 	std::vector<Log> GetBlock(size_t ID) const;
-	// Gets all logs which match the params, type (F - ferry, P - plane, M - mixed)
+	// Gets all logs which match the params, type (F - ferry, P - plane, T - train, M - mixed)
 	std::vector<Log> GetLogs(const std::string& cityA, const std::string& cityB, char type = 'M') const;
-	// Gets all logs which match the params, type (F - ferry, P - plane, M - mixed)
+	// Gets all logs which match the params, type (F - ferry, P - plane, T - train, M - mixed)
 	std::vector<Log> GetLogs(size_t cityA_ID, size_t cityB_ID, char type = 'M') const;
 	// Gets header
 	const std::vector<std::string>& GetHeader() const { return std::ref(header); }
+	// Gets summaries
+	const std::vector<Log> GetSummaries() const { return std::ref(summaries); }
 	// Gets info
 	const std::vector<std::vector<Log>>& GetInfo() const { return std::ref(info); }
 	// Gets count of all logs in database
 	size_t GetLogCount() const { return logCount; }
-	// Gets count of all blocks in database
-	size_t GetBlockCount() const { return info.size(); }
 	// Gets ref to Graph
 	Graph& GetGraph() { return std::ref(graph); }
 	// Gets const ref to CitiesIDs

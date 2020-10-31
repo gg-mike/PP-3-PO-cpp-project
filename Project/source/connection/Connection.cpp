@@ -32,12 +32,12 @@ std::string Connection::GetCityName(size_t ID) {
 	return database.GetCitiesIDs().cities.at(ID);
 }
 
-Log Connection::GetLog(size_t ID) {
+Log Connection::GetLogD(size_t ID) {
 	Log log = database.GetLog(ID);
 	return log;
 }
 
-std::vector<Log> Connection::GetBlock(size_t ID) {
+std::vector<Log> Connection::GetBlockSE(size_t ID) {
 	std::vector<Log> block = startEndConnections.GetBlock(ID);
 	return block;
 }
@@ -59,9 +59,9 @@ void Connection::ShowStartEndConnections() {
 }
 
 bool Connection::IsValidCity(size_t cityID) {
-	if (cityID <= database.GetCitiesIDs().cities.size())
-		return true;
-	return false;
+	if (cityID >= database.GetCitiesIDs().cities.size())
+		return false;
+	return true;
 }
 
 bool Connection::IsValidRouteID(size_t ID) {

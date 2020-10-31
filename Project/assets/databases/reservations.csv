@@ -1,5 +1,16 @@
-240211;easyJet;Newcastle;Belfast;1;35.5;P;
-240209;easyJet;Belfast;Liverpool;1;38;P;
-240109;easyJet;Liverpool;Amsterdam;1.5;38.5;P;
-210103;Air France;Amsterdam;Calais;1.25;213;P;
-160304;P&O Ferries;Calais;Dover;1.5;103;F;
+2040106;easyJet;Edinburgh;Amsterdam;1.67;38.5;P;
+3050112;Intercity;Amsterdam;Rotterdam;0.67;19;T;
+3050312;Intercity;Rotterdam;Calais;3.5;105;T;
+B
+2020407;British Airways;Dublin;Glasgow;1;120;P;
+3100607;ScotRail;Glasgow;Edinburgh;1;12.5;T;
+3080611;RailEasy;Edinburgh;Newcastle;1.5;36.5;T;
+B
+2090407;Ryanair;Dublin;Glasgow;1;20;P;
+2020710;British Airways;Glasgow;London;1.5;48.5;P;
+2021012;British Airways;London;Rotterdam;1;100;P;
+B
+3050112;Intercity;Amsterdam;Rotterdam;0.67;19;T;
+3050312;Intercity;Rotterdam;Calais;3.5;105;T;
+1030304;DFDS Seaways;Calais;Dover;1.5;171;F;
+3110410;Southeastern;Dover;London;1.0834;45;T;

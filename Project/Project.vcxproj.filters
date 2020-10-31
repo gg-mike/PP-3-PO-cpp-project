@@ -20,6 +20,7 @@
     </ClInclude>
     <ClInclude Include="source\connection\FerryConnection.h" />
     <ClInclude Include="source\connection\PlaneConnection.h" />
+    <ClInclude Include="source\connection\TrainConnection.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Application.cpp" />
@@ -36,6 +37,7 @@
     <ClCompile Include="source\database\Log.cpp" />
     <ClCompile Include="source\connection\FerryConnection.cpp" />
     <ClCompile Include="source\connection\PlaneConnection.cpp" />
+    <ClCompile Include="source\connection\TrainConnection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="assets\menus\main.menu" />

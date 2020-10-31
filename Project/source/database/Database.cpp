@@ -111,7 +111,7 @@ void Database::Init(const std::vector<std::string>& header, std::vector<std::vec
 Log Database::GetLog(size_t ID) const {
 	for (const auto& block : info)
 		for (const auto& log : block)
-			if (log.ID == ID)
+			if (log.ID == ID && log.FilterPass())
 				return log;
 	return Log();
 }
@@ -219,7 +219,7 @@ void Database::SortBlock(char type) {
 
 	for (size_t i = 0; i < info.size(); i++) {
 		summaries[i] = blocks[i].summary;
-		summaries[i].ID = i;
+		summaries[i].ID = i + 1;
 		info[i] = blocks[i].data;
 	}
 }
@@ -243,18 +243,11 @@ std::ostream& operator<<(std::ostream& os, const Database& database) {
 		if (!database.showSummaries) {
 			// LOGS
 			for (const auto& block : database.info)
-				for (const auto& log : block) {
-					if (UI::filter.active) {
-						if (log.FilterPass()) {
-							os << Border(1) << log << std::endl;
-							logsPrinted++;
-						}
-					}
-					else {
+				for (const auto& log : block)
+					if (log.FilterPass()) {
 						os << Border(1) << log << std::endl;
 						logsPrinted++;
 					}
-				}
 			os << Border(2);
 		}
 		else {

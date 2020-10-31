@@ -125,7 +125,7 @@ struct Menus : public Guides {
 // String to lowercase
 std::string ToLower(std::string line);
 // Error message in red with pause
-void WrongChoice(const std::string& print = "  Invalid number! ");
+void WrongChoice(const std::string& print = "  Invalid input! ");
 // Time formatting 
 std::string Time(float t);
 // Money formatting

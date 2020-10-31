@@ -18,18 +18,21 @@ public:
 
 	// Gets city name with specify index
 	std::string GetCityName(size_t ID);
-	// Gets log with given id
+	// Gets log with given id from database
 	// Redirected to: Log Database::GetLog(size_t)
-	Log GetLog(size_t ID);
-	// Gets block with given id
+	Log GetLogD(size_t ID);
+	// Gets block with given id from startEndConnections
 	// Redirected to: std::vector<Log> Database::GetBlock(size_t)
-	std::vector<Log> GetBlock(size_t ID);
+	std::vector<Log> GetBlockSE(size_t ID);
+	// Gets info from database
+	// Redirected to: const std::vector<std::vector<Log>>& GetInfo()
+	const std::vector<std::vector<Log>>& GetInfoD() const { return database.GetInfo(); }
+	// Gets info from startEndConnections
+	// Redirected to: const std::vector<std::vector<Log>>& GetInfo()
+	const std::vector<std::vector<Log>>& GetInfoSE() const { return startEndConnections.GetInfo(); }
 	// Gets count of all logs in database
 	// Redirected to: size_t Database::GetLogCount()
-	size_t GetLogCount() const { return database.GetLogCount(); }
-	// Gets count of all blocks in database
-	// Redirected to: size_t Database::GetBlockCount()
-	size_t GetBlockCount() const { return database.GetBlockCount(); }
+	size_t GetLogCountD() const { return database.GetLogCount(); }
 	
 	// Printers
 	

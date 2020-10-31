@@ -35,6 +35,8 @@ void Log::UpdataIDsOfCities(const std::map<std::string, size_t>& S2I) {
 }
 
 bool Log::FilterPass() const {
+	if (!UI::filter.active)
+		return true;
 	bool match = true;
 	if (match && UI::filter.carriersActive && UI::filter.carriers.find(carrier) == std::string::npos)
 		match = false;

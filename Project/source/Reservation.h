@@ -1,7 +1,8 @@
 #pragma once
 #include <memory>
-#include "connection/PlaneConnection.h"
 #include "connection/FerryConnection.h"
+#include "connection/PlaneConnection.h"
+#include "connection/TrainConnection.h"
 #include "connection/CombinedConnection.h"
 #include "database/Database.h"
 
@@ -34,36 +35,36 @@ public:
 		{
 		case 0:
 			// Single
-			log = connections->GetLog(i.first);
+			log = connections->GetLogD(i.first);
 			reservations.AddBlock(std::vector<Log>{ log });
 			break;
 		case 1:
 			// Single with switching dir
-			log = connections->GetLog(i.first);
+			log = connections->GetLogD(i.first);
 			std::swap(log.cityA, log.cityB);
 			reservations.AddBlock(std::vector<Log>{ log });
 			break;
 		case 2:
 			// Single append
-			log = connections->GetLog(i.first);
+			log = connections->GetLogD(i.first);
 			reservations.AppendLog(log);
 			break;
 		case 3:
 			// Single with switching dir append
-			log = connections->GetLog(i.first);
+			log = connections->GetLogD(i.first);
 			std::swap(log.cityA, log.cityB);
 			reservations.AppendLog(log);
 			break;
 		case 4:
 			// Block
-			std::vector<Log> block = connections->GetBlock(i.first);
+			std::vector<Log> block = connections->GetBlockSE(i.first);
 			reservations.AddBlock(block);
 			break;
 		}
 		if (i.second != 2 && i.second != 3)
 			reservations.MakeSummary();
 		else
-			reservations.MakeSummary(reservations.GetBlockCount() - 1);
+			reservations.MakeSummary(reservations.GetInfo().size() - 1ull);
 		SaveToFile("assets/databases/reservations.csv");
 	}
 	// Erases reservtions
@@ -84,23 +85,23 @@ public:
 	}
 	// Gets log with given id from connections database
 	// Redirected to: Log Connection::GetLog(size_t)
-	Log GetLogCon(size_t ID) {
-		return connections->GetLog(ID);
+	Log GetLogConD(size_t ID) {
+		return connections->GetLogD(ID);
 	}
 	// Gets block with given id from connections database
-	// Redirected to: std::vector<Log> Connection::GetBlock(size_t)
-	std::vector<Log> GetBlockCon(size_t ID) {
-		return connections->GetBlock(ID);
+	// Redirected to: std::vector<Log> Connection::GetBlockSE(size_t)
+	std::vector<Log> GetBlockConSE(size_t ID) {
+		return connections->GetBlockSE(ID);
+	}
+	// Gets info from connections database
+	// Redirected to: const std::vector<std::vector<Log>>& Connection::GetInfo()
+	const std::vector<std::vector<Log>>& GetInfoConD() {
+		return connections->GetInfoD();
 	}
 	// Gets count of all logs in connections database
 	// Redirected to: size_t Connection::GetLogCount()
-	size_t GetLogCountCon() {
-		return connections->GetLogCount();
-	}
-	// Gets count of all blocks in connections database
-	// Redirected to: size_t Connection::GetBlockCount()
-	size_t GetBlockCountCon() {
-		return connections->GetBlockCount();
+	size_t GetLogCountConD() {
+		return connections->GetLogCountD();
 	}
 	
 	// Reservations database
@@ -113,13 +114,14 @@ public:
 	std::vector<Log> GetBlockRes(size_t ID) {
 		return reservations.GetBlock(ID);
 	}
+	// Gets info from reservations database
+	// Redirected to: const std::vector<std::vector<Log>>& Connection::GetInfo()
+	const std::vector<std::vector<Log>>& GetInfoRes() {
+		return reservations.GetInfo();
+	}
 	// Gets count of all logs in reservations database
 	size_t GetLogCountRes() {
 		return reservations.GetLogCount();
-	}
-	// Gets count of all blocks in reservations database
-	size_t GetBlockCountRes() {
-		return reservations.GetBlockCount();
 	}
 
 	// Printers
@@ -131,6 +133,18 @@ public:
 	// Prints all active reservations
 	void ShowReservations() {
 		std::cout << reservations << std::endl;
+	}
+	// Prints reservation
+	void ShowReservation(size_t ID = SIZE_MAX) {
+		std::cout << Border(0);
+		if (ID == SIZE_MAX)
+			ID = reservations.GetInfo().size() - 1ull;
+		if (ID < reservations.GetInfo().size()) {
+			std::cout << reservations.GetSummaries().at(ID) << std::endl;
+			for (const auto& log : reservations.GetBlock(ID))
+				std::cout << Border(1) << log << std::endl;
+		}
+		std::cout << Border(2);
 	}
 	// Prints whole database of connections
 	void ShowConnections() {
@@ -145,27 +159,23 @@ public:
 	// Others
 
 	// Validates reservations ID
-	bool IsValidReservationID(size_t ID) {
-		if (ID >= reservations.GetBlockCount())
+	bool IsValidBlockIDRes(size_t ID) {
+		if (ID >= reservations.GetInfo().size())
 			return false;
 		return true;
 	}
-	// Validates route ID
-	bool IsValidRouteID(size_t ID) {
-		return connections->IsValidRouteID(ID);
-	}
-	// Validates log ID in connections database
-	bool IsValidConnectionID(size_t ID) {
-		Log log = connections->GetLog(ID);
+	// Validates log ID in Connection's database
+	bool IsValidLogIDConD(size_t ID) {
+		Log log = connections->GetLogD(ID);
 		if (log.ID == SIZE_MAX || !log.FilterPass())
 			return false;
 		return true;
 	}
-	// Validates block ID in connection database
-	bool IsValidBlockID(size_t ID) {
-		if (connections->GetBlock(ID).size())
-			return true;
-		return false;
+	// Validates block ID in Connection's startEndConnections database
+	bool IsValidBlockIDConSE(size_t ID) {
+		if (ID >= connections->GetInfoSE().size())
+			return false;
+		return true;
 	}
 	// Validates of city choice
 	bool IsValidCity(size_t cityID) {
@@ -184,7 +194,7 @@ private:
 	void SaveToFile(const std::string& filepath) {
 		std::ofstream ofs(filepath, std::ofstream::trunc);
 
-		for (size_t i = 0; i < reservations.GetBlockCount(); i++) {
+		for (size_t i = 0; i < reservations.GetInfo().size(); i++) {
 			if (i)
 				ofs << 'B' << std::endl;
 			for (const auto& log : reservations.GetInfo()[i])
