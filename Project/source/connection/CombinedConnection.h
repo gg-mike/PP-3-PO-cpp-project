@@ -1,7 +1,7 @@
 #pragma once
 #include "Connection.h"
 
-// Interface between database and reservations for both types
+// Interface between the database and reservations for both types
 class CombinedConnection :
     public Connection
 {

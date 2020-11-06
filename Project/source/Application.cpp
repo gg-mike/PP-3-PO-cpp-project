@@ -10,7 +10,7 @@ namespace UI {
 }
 
 bool FilterInput(bool first, bool reenter, bool smartFilter, const std::string& citiesFilter="") {
-	if ((reenter && UI::filter.active && Confirm("y to reenter database filter: ")) || (!reenter && Confirm("y to enter database filter: "))) {
+	if ((reenter && UI::filter.active && Confirm("y to reenter the database filter: ")) || (!reenter && Confirm("y to enter the database filter: "))) {
 		std::string filterContent = Input<std::string>(((first) ? "Filter (CCDCT): " : "Fliter (CDCT): "));
 		UI::filter.Init(filterContent, ((first) ? "CCDCT" : "CDCT"));
 
@@ -39,7 +39,7 @@ void SpecificAdd(Reservation<T>& reservation) {
 	bool invalid = false;
 
 	system("cls");
-	bool smartFilter = Confirm("y to enable Smart Filter: ");
+	bool smartFilter = Confirm("y to enable the Smart Filter: ");
 	system("cls");
 
 	std::cout << "  Smart Filter: " << Clr(COLOR::DARK_YELLOW) << ((smartFilter) ? "enabled" : "disabled") << Clr() << std::endl;
@@ -67,7 +67,7 @@ void SpecificAdd(Reservation<T>& reservation) {
 			std::cout << std::endl;
 
 			if (!filterActive || (filterActive && !FilterInput(first, true, smartFilter, citiesFilter))) {
-				std::cout << "\n  Which connections do you want to add?\n  You can switch direction of connection later.\n";
+				std::cout << "\n  Which connections do you want to add?\n  You can switch the direction of the connection later.\n";
 				choice = Input<size_t>("ID (0 to abort): ");
 				if (choice && choice != SIZE_MAX)
 					add = reservation.IsValidLogIDConD(choice);
@@ -82,7 +82,7 @@ void SpecificAdd(Reservation<T>& reservation) {
 		// Adding connection
 		if (add) {
 			// Switching direction of the connection
-			if (Confirm("y to switch direction of connection: "))
+			if (Confirm("y to switch the direction of the connection: "))
 				reservation += std::pair<size_t, size_t>{ choice, ((first) ? 1 : 3) };
 			else
 				reservation += std::pair<size_t, size_t>{ choice, ((first) ? 0 : 2) };
@@ -270,7 +270,7 @@ void DeleteLoop(Reservation<T>& reservation) {
 	} while (!reservation.IsValidBlockIDRes(choice - 1ull) && choice);
 	
 	if (choice) {
-		std::cout << "  Are you sure you want to delete reservation nr " << Clr(COLOR::DARK_YELLOW) << choice << Clr() << "?\n";
+		std::cout << "  Are you sure you want to delete the reservation no. " << Clr(COLOR::DARK_YELLOW) << choice << Clr() << "?\n";
 		std::cout << Clr(COLOR::RED) << "  This process is irreversible!" << Clr() << std::endl;
 		
 		if (Confirm("y to confirm: ")) {
@@ -333,7 +333,7 @@ void AccountLoop() {
 void MainLoop() {
 	size_t choice;
 	while (UI::running) {
-		UI::menus(0, "  Type of transport, you're interested in");
+		UI::menus(0, "  Type of transport you're interested in");
 		choice = Input<size_t>("Your choice: ");
 		switch (choice) {
 		case 1:
@@ -384,7 +384,8 @@ int main()
 
 	UI::guides.Init(guideFilepaths);
 	UI::menus.Init(menuFilepaths);
-	
+	std::cout << "  While using the application, it is a good idea to open the connections map \n  which is located here: "
+		<< Clr(COLOR::DARK_YELLOW) << "assets/Connections Map.png\n\n" << Clr();
 	MainLoop();
 
 	std::cout << "  Thank you for using my application.\n  ";

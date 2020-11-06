@@ -76,7 +76,7 @@ void Database::Init(const std::string& filepath, char type, bool showSummaries) 
 	else {
 		std::cout << "Connection database is missing!\n"
 			<< "Please reload the application with the new database provided to this location: " << Clr(COLOR::YELLOW) << filepath << Clr() << std::endl
-			<< "Or make sure that given filepath is correct.\n";
+			<< "Or make sure that the typed filepath is correct.\n";
 		std::cin.get();
 		exit(1);
 	}

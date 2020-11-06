@@ -1,17 +1,17 @@
-  $Specific Add$
+  $Add specific connections$
      
     #Overview#
       By using this option you can choose which specific connections you want to add to your booking.
-      You can choose a single or multiple booking. Each displayed connection is bidirectional and by
-      selecting a connection you can change the order of the cities in the connection.
+      You can choose a single or multiple booking. Each displayed connection is bidirectional and after
+      selecting a given connection you can change the order of the cities in the connection.
 
     #Filtering logs#
 
       #Overview#
         There are 2 types of filters you can specify, `CCDCT` and `CDCT`.
-        With `CCDCT` filter you can specify all filter attributes.
-        `CDCT` filter is used if you have chosen the option of `Smart Filter`
-        which automatically generates 'Cities' filtering based on destination of previous connection.
+        With the `CCDCT` filter you can specify all filter attributes.
+        The `CDCT` filter is used if you have chosen the option of the `Smart Filter`,
+        which automatically filters by 'City' based on the destination of the previous connection.
    
       #Syntax#
         Each field is separated by `;`.
@@ -19,14 +19,14 @@
         Syntax for `CCDCT`: `Carriers;Cities;Duration;Cost;Type`
         Syntax for `CDCT` : `Carriers;Duration;Cost;Type`
         
-        For fields `Carriers`, `Cities` and `Type` write names you are interested in and seperate
-        them with `,`. If you don't want to filter by one of those field leave it empty or write `*`.
+        For fields `Carriers`, `Cities` and `Type`, write names you are interested in and seperate
+        them with `,`. If you don't want to filter by one of these fields, leave it empty or write `*`.
    
-        For fields `Duration` and `Cost` write MIN and MAX value and seperate them with `,`.
-        If you want to use defualt values for either MIN or MAX leave it empty or write `*`.
-        If you don't want to filter by one of those field leave it empty or write `*`.
+        For fields `Duration` and `Cost`, write MIN and MAX value and seperate them with `,`.
+        If you want to use defualt values for either MIN or MAX, leave the field empty or write `*`.
+        If you don't want to filter by one of these fields, leave it empty or write `*`.
    
-        You have to write `;` only for field which are in front of the filter you're interested in.
+        You have to write `;` only for the fields preceding the filter you're interested in.
    
       #Examples#
         `CCDCT` filter:
@@ -38,10 +38,10 @@
         -> ;minDuration,;;Type
         -> Carrier
 
-  $Find route between two cities$
+  $Find a route between two cities$
 
     #Overview#
-      With this option you only specify start and end location, and application will find route for you.
+      With this option you only specify the start and end location, and the application will find the route for you.
 
     #Sorting results#
-      After application finds possible route you can choose how they are sorted and presented to.
+      After the application finds possible routes, you can choose how they are sorted and displayed.

@@ -3,30 +3,30 @@
 #include "Log.h"
 #include "Graph.h"
 
-// Enables fast switching between cities names and IDs
+// Enables fast switching between city names and IDs
 struct CitiesIDs {
 	// Initializers
 
 	// Empty object
 	CitiesIDs() = default;
-	// info from Database
+	// info from the database
 	CitiesIDs(const std::vector<std::vector<Log>>& info) { Init(info); }
-	// info from Database
+	// info from the database
 	void Init(const std::vector<std::vector<Log>>& info);
 	
 	// Others
 
 	friend std::ostream& operator<<(std::ostream& os, const CitiesIDs& citiesIDs);
 
-	// Cities names to IDs
+	// City names to IDs
 	std::map<std::string, size_t> S2I;
-	// IDs to cities names
+	// IDs to city names
 	std::map<size_t, std::string> I2S;
 	// List of all cities
 	std::vector<std::string> cities;
 };
 
-// Contains all informations extracted from files
+// Contains all information extracted from the file
 class Database {
 public:
 	// Initializers
@@ -37,26 +37,26 @@ public:
 	Database(const std::string& filepath, char type = 'M') { Init(filepath, type); }
 	// type (F - ferry, P - plane, M - mixed)
 	void Init(const std::string& filepath, char type = 'M', bool showSummaries = false);
-	// Initializing database with info from different one
+	// Initializing the database with info from a different one
 	void Init(const std::vector<std::string>& header, std::vector<std::vector<Log>>& info, char type = 'M', bool showSummaries = false);
 
 	// Getters
 
-	// Gets log with given id
+	// Gets the log with a given id
 	Log GetLog(size_t ID) const;
-	// Gets block with given id
+	// Gets the block with a given id
 	std::vector<Log> GetBlock(size_t ID) const;
 	// Gets all logs which match the params, type (F - ferry, P - plane, T - train, M - mixed)
 	std::vector<Log> GetLogs(const std::string& cityA, const std::string& cityB, char type = 'M') const;
 	// Gets all logs which match the params, type (F - ferry, P - plane, T - train, M - mixed)
 	std::vector<Log> GetLogs(size_t cityA_ID, size_t cityB_ID, char type = 'M') const;
-	// Gets header
+	// Gets the header
 	const std::vector<std::string>& GetHeader() const { return std::ref(header); }
-	// Gets summaries
+	// Gets the summaries
 	const std::vector<Log> GetSummaries() const { return std::ref(summaries); }
 	// Gets info
 	const std::vector<std::vector<Log>>& GetInfo() const { return std::ref(info); }
-	// Gets count of all logs in database
+	// Gets the count of all logs in the database
 	size_t GetLogCount() const { return logCount; }
 	// Gets ref to Graph
 	Graph& GetGraph() { return std::ref(graph); }
@@ -65,16 +65,16 @@ public:
 
 	// Others
 	
-	// Creates summary for a given block, return false if ID is not matching any block
-	// If 0 params given, summary of last block is created
+	// Creates a summary for a given block, returns false if ID does not match any block
+	// If 0 params given, a summary of the last block is created
 	bool MakeSummary(size_t ID = SIZE_MAX);
-	// Appends log to last existing block
+	// Appends log to the last existing block
 	void AppendLog(Log& log);
-	// Adds given block to database
+	// Adds a given block to the database
 	void AddBlock(std::vector<Log>& block);
-	// Erases block with given ID
+	// Erases the block with a given ID
 	void EraseBlock(size_t ID);
-	// Sorts block according to given type (D - duration, C - cost)
+	// Sorts blocks according to a given type (D - duration, C - cost)
 	void SortBlock(char type);
 	friend std::ostream& operator<<(std::ostream& os, const Database& database);
 
@@ -84,7 +84,7 @@ private:
 	std::vector<std::string> header = { "ID", "Carrier", "From", "To", "Duration", "Cost", "Type" };
 	// Summary logs
 	std::vector<Log> summaries = {};
-	// All logs in database
+	// All logs in the database
 	std::vector<std::vector<Log>> info = {};
 	// Logs count in info
 	size_t logCount = 0;

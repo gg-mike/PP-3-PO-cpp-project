@@ -143,7 +143,7 @@ std::ostream& operator<<(std::ostream& os, const Filter& filter)
 	if (filter.active) {
 		os << "  Active filters:\n";
 		if (filter.carriersActive)
-			os << std::setw(20) << "Company names: " << Clr(COLOR::DARK_YELLOW) << filter.carriers << Clr() << std::endl;
+			os << std::setw(20) << "Carriers: " << Clr(COLOR::DARK_YELLOW) << filter.carriers << Clr() << std::endl;
 		if (filter.citiesActive)
 			os << std::setw(20) << "Cities: " << Clr(COLOR::DARK_YELLOW) << filter.cities << Clr() << std::endl;
 		if (filter.durationActive) {
@@ -194,7 +194,7 @@ void Guides::Init(const std::string& filepath, std::string& content) {
 	else {
 		std::cout << "Help guide content is missing!\n"
 			<< "Please reload the application with the new menu provided to this location: " << Clr(COLOR::YELLOW) << filepath << Clr() << std::endl
-			<< "Or make sure that given filepath is correct.\n";
+			<< "Or make sure that the typed filepath is correct.\n";
 		std::cin.get();
 		exit(1);
 	}
@@ -252,7 +252,7 @@ void Menus::Init(const std::string& filepath, std::string& content) {
 	else {
 		std::cout << "Menu content is missing!\n"
 			<< "Please reload the application with the new menu provided to this location: " << Clr(COLOR::YELLOW) << filepath << Clr() << std::endl
-			<< "Or make sure that given filepath is correct.\n";
+			<< "Or make sure that the typed filepath is correct.\n";
 		std::cin.get();
 		exit(1);
 	}
@@ -320,7 +320,7 @@ std::string Money(float m) {
 
 template<>
 std::string Input<std::string>(const std::string& print) {
-	std::cout << std::setw(40) << print;
+	std::cout << std::setw(50) << print;
 	std::string in;
 	std::getline(std::cin, in);
 	return in;
@@ -328,7 +328,7 @@ std::string Input<std::string>(const std::string& print) {
 
 template<>
 size_t Input<size_t>(const std::string& print) {
-	std::cout << std::setw(40) << print;
+	std::cout << std::setw(50) << print;
 	std::string in;
 	std::getline(std::cin, in);
 	in.erase(std::remove(in.begin(), in.end(), ' '), in.end());

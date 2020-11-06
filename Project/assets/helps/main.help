@@ -2,13 +2,13 @@
     Every menu consists of options specific to this menu and 3 other options: `Back`, `Help`, `Exit`.
 
     #Back#
-      Moves to a previous menu.
+      Moves to the previous menu.
 
     #Help#
       Provides a description and a guide to all the options contained in the menu.
 
     #Exit#
-      Exits the application without need of backtracking to the main menu.
+      Exits the application without the need to backtrack to the main menu.
 
   $Ferry, Plane, Trains, All$
     Choose the type of transport you're interested in.

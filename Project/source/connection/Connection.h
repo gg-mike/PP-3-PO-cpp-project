@@ -2,7 +2,7 @@
 #include "database/Database.h"
 
 // !! ABSTRACT CLASS !!
-// Interface between database and reservations
+// Interface between the database and reservations
 class Connection
 {
 public:
@@ -16,21 +16,21 @@ public:
 
 	// Getters
 
-	// Gets city name with specify index
+	// Gets the city name with a specific index
 	std::string GetCityName(size_t ID);
-	// Gets log with given id from database
+	// Gets log with a given id from the database
 	// Redirected to: Log Database::GetLog(size_t)
 	Log GetLogD(size_t ID);
-	// Gets block with given id from startEndConnections
+	// Gets block with a given id from startEndConnections
 	// Redirected to: std::vector<Log> Database::GetBlock(size_t)
 	std::vector<Log> GetBlockSE(size_t ID);
-	// Gets info from database
+	// Gets info from the database
 	// Redirected to: const std::vector<std::vector<Log>>& GetInfo()
 	const std::vector<std::vector<Log>>& GetInfoD() const { return database.GetInfo(); }
 	// Gets info from startEndConnections
 	// Redirected to: const std::vector<std::vector<Log>>& GetInfo()
 	const std::vector<std::vector<Log>>& GetInfoSE() const { return startEndConnections.GetInfo(); }
-	// Gets count of all logs in database
+	// Gets count of all logs in the database
 	// Redirected to: size_t Database::GetLogCount()
 	size_t GetLogCountD() const { return database.GetLogCount(); }
 	
@@ -38,21 +38,21 @@ public:
 	
 	// Prints all cities using Database::citiesIDs
 	void ShowAllCities();
-	// Prints whole database
+	// Prints the whole database
 	void ShowDatabase();
 	// Print all options of connections found using pathfinding
 	void ShowStartEndConnections();
 
 	// Others
 
-	// Validates of city choice
+	// Validates the city choice
 	bool IsValidCity(size_t cityID);
-	// Validates route ID
+	// Validates the route ID
 	bool IsValidRouteID(size_t ID);
 
 protected:
 	virtual void InitDatabase() = 0;
-	// Converts results of pathfinding into the database
+	// Converts pathfinding results into the database
 	void PathToDatabase(const std::vector<size_t>& path, char type);
 	// Pathfinding
 	// type(D - shortest duration, C - smallest cost)

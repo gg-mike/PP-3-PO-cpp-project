@@ -3,7 +3,7 @@
 #include <vector>
 #include <set>
 
-// Stores all connections from given node and state of node
+// Stores all connections from a given node and its state
 struct Node
 {
 	Node() = default;
@@ -21,9 +21,9 @@ public:
 
 	// Empty object
 	Graph() = default;
-	// info from database, citiesCount from citiesIDs
+	// info from the database, citiesCount from citiesIDs
 	Graph(const std::vector<std::vector<Log>>& info, size_t citiesCount) { Init(info, citiesCount); }
-	// info from database, citiesCount from citiesIDs
+	// info from the database, citiesCount from citiesIDs
 	void Init(const std::vector<std::vector<Log>>& info, size_t citiesCount);
 
 	// Getters
@@ -45,11 +45,11 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const Graph& graph);
 
 private:
-	// Sets state of all nodes to false
+	// Sets the state of all nodes to false
 	void Reset(std::vector<Node>& nodes);
 
 private:
-	// Stores smallest weight value for given connection
+	// Stores the smallest weight value for a given connection
 	std::map<std::set<size_t>, double> dWeights;
 	std::map<std::set<size_t>, double> cWeights;
 	// Connection nodes
